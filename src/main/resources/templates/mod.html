@@ -1,0 +1,50 @@
+<html>
+<body>
+<pre>
+    #*
+    *你看不到我~~~~~
+    *#
+    $!{value1}
+    ${value2}  ##“!”不存在则强制为空
+    $!{value3}
+    colors : $!{colors}
+    #foreach($color in $colors)
+        This is Color $!{foreach.index}: $color, $!{foreach.count}
+    #end
+
+    #foreach($key in $map.keySet())
+        Number: $key, Value: $map.get($key)
+    #end
+
+    #foreach($kv in $map.entrySet())
+        Number: $kv.key, Value: $kv,value
+    #end
+
+    User: $!{user.name}
+    $!{user.descrption}
+    $!{user.getDescrption()}
+
+    #set($title = "dengjiajun's website!")
+
+    Title: $!{title}
+
+    Parse: #parse("header.html") ##将文件的参数解析出来
+    Include: #include("header.html") ##纯粹把文件的文本包含进来，不做文本解析（用在头尾上）
+
+    #macro(render_color, $index, $color)
+        Color Render Macro $index, $color
+    #end
+
+     #foreach($color in $colors)
+        #render_color($foreach.index,$color)
+    #end
+
+    #set($hi = "hello, hi")
+    #set($helloworld2 = "$!{hi} my world")
+
+    $!hi
+    $helloworld2
+
+</pre>
+</body>
+</html>
