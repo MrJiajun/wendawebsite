@@ -1,9 +1,11 @@
 package com.nwecoder.controller;
 
 import com.nwecoder.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -90,11 +92,18 @@ public class IndexController {
     }
 
     @RequestMapping(path = {"/redirect/{code}"}, method = {RequestMethod.GET})
-    public String redirect(@PathVariable("code") int code,
+    public RedirectView redirect(@PathVariable("code") int code,
                            HttpSession httpSession)
     {
         httpSession.setAttribute("msg","jump from redirect");
-        return "redirect:/";
+        RedirectView red = new RedirectView("/", true);
+
+        if(code == 301)
+        {
+            red.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        }
+
+        return red;
     }
 
 }
