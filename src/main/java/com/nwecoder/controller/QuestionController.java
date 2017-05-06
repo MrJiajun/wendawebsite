@@ -4,15 +4,14 @@ package com.nwecoder.controller;
 import com.nwecoder.model.HostHolder;
 import com.nwecoder.model.Question;
 import com.nwecoder.service.QuestionService;
+import com.nwecoder.service.UserService;
 import com.nwecoder.util.WendaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -28,6 +27,9 @@ public class QuestionController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    UserService  userService;
 
     @RequestMapping(value = "/question/add", method = {RequestMethod.POST})
     @ResponseBody
@@ -53,5 +55,13 @@ public class QuestionController {
             logger.error("题目增加失败"+e.getMessage());
         }
         return WendaUtil.getJSONString(1, "失败");
+    }
+
+    @RequestMapping(value = "/question/{qid}")
+    public String questionDetail(Model model, @PathVariable("qid") int qid){
+        Question question = questionService.selectById(qid);
+        model.addAttribute("question", question);
+        model.addAttribute("user", userService.getUser(question.getUserId()));
+        return "detail";
     }
 }
