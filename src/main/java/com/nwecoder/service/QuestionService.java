@@ -16,10 +16,18 @@ public class QuestionService {
 
     @Autowired
     QuestionDAO questionDAO;
+
+    @Autowired
+    SensitiveService sensitiveService;
+
     public int addQuesion(Question question){
         //敏感词过滤（Html标签的过滤）
         question.setContent(HtmlUtils.htmlEscape(question.getContent()));
         question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
+
+        //敏感词过滤
+        question.setContent(sensitiveService.filter(question.getContent()));
+        question.setTitle(sensitiveService.filter(question.getTitle()));
 
         return questionDAO.addQuestion(question) > 0 ? question.getId() : 0;
     }
