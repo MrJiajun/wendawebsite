@@ -32,7 +32,6 @@ public class UserService {
     public Map<String, Object> register(String username, String password)
     {
         Map<String, Object> map = new HashMap<String, Object>();
-        //System.out.println(password + " 1");
         if(StringUtils.isBlank(username))
         {
             map.put("msg","用户名不能为空");
@@ -45,7 +44,6 @@ public class UserService {
             return map;
         }
 
-        //System.out.println(password + " 1");
         User user = userDAO.selectByName(username);
 
         if(user != null)
@@ -122,6 +120,6 @@ public class UserService {
     }
 
     public void logout(String ticket){
-        loginTicketDAO.updateStaus(ticket, 1);
+        loginTicketDAO.updateStatus(ticket, 1);
     }
 }
