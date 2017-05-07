@@ -20,6 +20,10 @@ public class QuestionService {
     @Autowired
     SensitiveService sensitiveService;
 
+    public Question selectById(int id){
+        return questionDAO.selectById(id);
+    }
+
     public int addQuesion(Question question){
         //敏感词过滤（Html标签的过滤）
         question.setContent(HtmlUtils.htmlEscape(question.getContent()));
@@ -35,6 +39,10 @@ public class QuestionService {
     public List<Question > getLatestQuestions(int userId, int offset, int limit)
     {
         return questionDAO.selectLatestQuestions(userId, offset, limit);
+    }
+
+    public int updateCommentCount(int id, int count){
+        return questionDAO.updateCommentCount(id, count);
     }
 }
 

@@ -5,6 +5,7 @@ import com.nwecoder.model.Comment;
 import com.nwecoder.model.EntityType;
 import com.nwecoder.model.HostHolder;
 import com.nwecoder.service.CommentService;
+import com.nwecoder.service.QuestionService;
 import com.nwecoder.util.WendaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,9 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
+    @Autowired
+    QuestionService questionService;
+
     @RequestMapping(path = {"/addComment"}, method = {RequestMethod.POST})
     public String addComment(@RequestParam("questionId") int questionId,
                              @RequestParam("content") String content){
@@ -44,7 +48,12 @@ public class CommentController {
             comment.setCreatedDate(new Date());
             comment.setEntityType(EntityType.ENTITY_QUESTION);
             comment.setEntityId(questionId);
+            comment.setStatus(0);
             commentService.addComment(comment);
+
+           int count = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());
+           questionService.updateCommentCount(comment.getEntityId(), count);
+
         }catch (Exception e){
             logger.error("增加评论失败" + e.getMessage());
        }
