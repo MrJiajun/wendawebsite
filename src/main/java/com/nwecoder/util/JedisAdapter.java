@@ -2,7 +2,6 @@ package com.nwecoder.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.nwecoder.aspect.LogAspect;
 import com.nwecoder.model.User;
 
 import org.slf4j.Logger;
@@ -167,7 +166,7 @@ public class JedisAdapter implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception{
-        pool = new JedisPool("redis://localhost:6379/5");
+        pool = new JedisPool("redis://localhost:6379/10");
     }
 
 
@@ -267,5 +266,4 @@ public class JedisAdapter implements InitializingBean {
         }
         return 0;
     }
-
 }
