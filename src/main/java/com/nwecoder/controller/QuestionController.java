@@ -3,6 +3,7 @@ package com.nwecoder.controller;
 
 import com.nwecoder.model.*;
 import com.nwecoder.service.CommentService;
+import com.nwecoder.service.LikeService;
 import com.nwecoder.service.QuestionService;
 import com.nwecoder.service.UserService;
 import com.nwecoder.util.WendaUtil;
@@ -35,6 +36,9 @@ public class QuestionController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    LikeService likeService;
 
     @RequestMapping(value = "/question/add", method = {RequestMethod.POST})
     @ResponseBody
@@ -73,6 +77,13 @@ public class QuestionController {
         for(Comment comment : commentList){
             ViewObject vo = new ViewObject();
             vo.set("comment", comment);
+            if(hostHolder.getUser() == null){
+                vo.set("liked", 0);
+            }else{
+                vo.set("liked", likeService.getLikeStatus(hostHolder.getUser().getId(),EntityType.ENTITY_COMMENT, comment.getId()));
+            }
+
+            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT, comment.getId()));
             vo.set("user", userService.getUser(comment.getUserId()));
             comments.add(vo);
         }

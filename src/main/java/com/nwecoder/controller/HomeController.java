@@ -3,6 +3,7 @@ package com.nwecoder.controller;
 
 
 
+import com.nwecoder.model.HostHolder;
 import com.nwecoder.model.Question;
 import com.nwecoder.model.ViewObject;
 import com.nwecoder.service.QuestionService;
@@ -12,10 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +31,12 @@ public class HomeController {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    HostHolder hostHolder;
+
     private List<ViewObject> getQuestion(int userId, int offset, int limit)
     {
-        List<Question> questionList = questionService.getLatestQuestions(0,0,10);
+        List<Question> questionList = questionService.getLatestQuestions(userId, offset, limit);
         List<ViewObject> vos = new ArrayList<ViewObject>();
 
         for(Question question : questionList)
@@ -52,7 +53,8 @@ public class HomeController {
 
     @RequestMapping(path = {"/","index"}, method = {RequestMethod.GET})
    // @ResponseBody
-    public String index(Model model){
+    public String index(Model model,
+                        @RequestParam(value = "pop", defaultValue = "0") int pop){
 
         model.addAttribute("vos",getQuestion(0, 0, 10));
         return "index";
